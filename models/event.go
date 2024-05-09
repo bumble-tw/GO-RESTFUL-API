@@ -17,6 +17,7 @@ type Event struct {
 
 var events = []Event{}
 
+//替 Event結構 定義一個方法 Save()
 func(e *Event) Save() error{
 	// SQL 查詢語句，用來插入事件的資料到 events 表中。問號（?）是佔位符，稍後會被具體的值替換。
 	query := `
@@ -70,11 +71,32 @@ func GetAllEvents () ([]Event,error) {
 func GetEventById(eventId int64) (*Event, error){
 	query := "SELECT * FROM events WHERE id = ?"
 	row := db.DB.QueryRow(query,eventId) // for id case use queryRow
-
 	var event Event
+
 	err := row.Scan(&event.ID, &event.Name, &event.Desc, &event.Location, &event.Date, &event.UserId)
+
 	if err != nil {
 		return nil, err
 	}
+
 	return &event, nil
+}
+
+//替 Event結構 定義一個方法 Update()
+func (event Event) Update() error{
+	query := `
+	UPDATE events
+	SET name = ? , description = ? , location = ? , date = ?
+	WHERE id = ?
+	`
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.Name, event.Desc, event.Location, event.Date, event.ID)
+  return err
 }
