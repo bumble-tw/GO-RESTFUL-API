@@ -91,3 +91,25 @@ func updateEvent(context *gin.Context) {
 
     context.JSON(200, gin.H{"message": "Event updated!"})
 }
+
+func deleteEvent(context *gin.Context) {
+	eventId, err := strconv.ParseInt(context.Param("eventId"), 10, 64)
+	if err != nil {
+		context.JSON(400, gin.H{"message: ": "Could not parse event id"})
+		return 
+	}
+	event, err := models.GetEventById(eventId)
+	if err != nil {
+		context.JSON(500, gin.H{"message: ": "Could not fetch event"})
+		return 
+	}
+
+	err = event.Delete()
+
+	if err != nil {
+		context.JSON(500, gin.H{"message: ": "Could not delete event"})
+		return
+	}
+
+	context.JSON(200, gin.H{"message": "Event delete successfully!"})
+}

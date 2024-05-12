@@ -100,3 +100,16 @@ func (event Event) Update() error{
 	_, err = stmt.Exec(event.Name, event.Desc, event.Location, event.Date, event.ID)
   return err
 }
+
+func (event Event) Delete() error{
+	query := "DELETE FROM events WHERE id = ?"
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.ID)
+	return err
+}
