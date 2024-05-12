@@ -15,8 +15,6 @@ type Event struct {
 	UserId int
 }
 
-var events = []Event{}
-
 //替 Event結構 定義一個方法 Save()
 func(e *Event) Save() error{
 	// SQL 查詢語句，用來插入事件的資料到 events 表中。問號（?）是佔位符，稍後會被具體的值替換。
