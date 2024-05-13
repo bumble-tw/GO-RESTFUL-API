@@ -30,3 +30,22 @@ func signup(context *gin.Context) {
     // 返回成功的響應
     context.JSON(201, gin.H{"message": "用戶創建成功！"})
 }
+
+func login(context *gin.Context) {
+    var user models.User
+    err := context.ShouldBindJSON(&user)
+
+    if err != nil {
+        context.JSON(400, gin.H{"message": "無法解析用戶數據"})
+        return
+    }
+
+    err = user.ValidateCredentials()
+    
+    if err != nil {
+        context.JSON(401, gin.H{"message": "登錄失敗"})
+        return
+    }
+
+    context.JSON(200, gin.H{"message": "登錄成功！"})
+}
