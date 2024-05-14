@@ -2,6 +2,7 @@ package routes
 
 import (
 	"example.com/models"
+	"example.com/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -47,5 +48,13 @@ func login(context *gin.Context) {
         return
     }
 
-    context.JSON(200, gin.H{"message": "登錄成功！"})
+    token, err := utils.GenerateToken(user.Email, user.ID)
+
+    if err != nil {
+        context.JSON(500, gin.H{"message": "無法生成令牌"})
+        return
+    }
+
+
+    context.JSON(200, gin.H{"message": "登錄成功！", "token": token})
 }

@@ -44,12 +44,12 @@ func (u *User) Save() error {
 }
 
 func (u *User) ValidateCredentials() error {
-	query := "SELECT email, password FROM users WHERE email =?"
+	query := "SELECT id, email, password FROM users WHERE email =?"
 	row := db.DB.QueryRow(query, u.Email)
 
 
 	var retrievedEmail, retrievedPassword string
-	err := row.Scan(&retrievedEmail, &retrievedPassword)
+	err := row.Scan(&u.ID, &retrievedEmail, &retrievedPassword)  //將資料庫查詢的結果掃描並將值分配給指定的變數
 
 	if err != nil {
 		return errors.New("credentials invalid")

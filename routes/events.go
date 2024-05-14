@@ -35,6 +35,15 @@ func getEvent(context *gin.Context){
 }
 
 func createEvent(context *gin.Context) {
+	token := context.Request.Header.Get("Authorization") // 取得 Authorization header
+
+	if token == "" {
+		context.JSON(401, gin.H{"message": "Authorization token is required"})
+		return
+	}
+
+	
+
 	event := models.Event{}
 	err := context.ShouldBindJSON(&event)
 
