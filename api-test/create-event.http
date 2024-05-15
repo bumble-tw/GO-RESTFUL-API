@@ -1,8 +1,9 @@
 POST http://localhost:8080/events
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzE1NzUwMTQ3LCJ1c2VySWQiOjJ9._qdmlnhGiQMKsgrdWAXZ2FZxnIKXF4b0_lH6IbA2kwA
 
 {
-  "name": "Test Event2",
+  "name": "Test Event anther",
   "Desc": "This is a test event",
   "location": "Test Location",
   "Date": "2020-01-01T00:00:00Z"

@@ -11,43 +11,44 @@ var secretKey = "myGolangSecret"
 
 func GenerateToken (email string,userId int64) (string, error) {
 	 token := jwt.NewWithClaims(jwt.SigningMethodHS256,jwt.MapClaims{
-		"email": "",
-		"userId": "",
+		"email": email,
+		"userId": userId,
 		"exp":time.Now().Add(time.Hour *2).Unix(),
 	 })
 	 
 	 return token.SignedString([]byte(secretKey))
 }
 
-func VerifyToken(token string) (jwt.MapClaims, error) {
+func VerifyToken(token string) (int64, error) {
 	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{},error){
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 
 		if !ok {
-			return nil, errors.New("Unexpected signing method")
+			return nil, errors.New("unexpected signing method")
 		}
 
-		return secretKey, nil
+		return []byte(secretKey), nil
 	})
 
 	if err != nil {
-		return nil, errors.New("Could not parse token")
+		return 0, errors.New("could not parse token")
 	}
 
 	tokenIsValid := parsedToken.Valid
 
 	if !tokenIsValid {
-		return nil, errors.New("Token is not valid")
+		return 0, errors.New("token is not valid")
 	}
 
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 
 	if !ok {
-		return nil, errors.New("Could not parse claims")
+		return 0, errors.New("could not parse claims")
 	}
 
 	// email := claims["email"].(string)
-	// userId := claims["userId"].(int64)
+	userId := int64(claims["userId"].(float64))
+	
 
-	return claims, nil
+	return userId, nil
 }

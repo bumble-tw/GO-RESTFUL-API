@@ -12,7 +12,7 @@ type Event struct {
 	Desc string	`binding:"required"`
 	Location string `binding:"required"`
 	Date time.Time `binding:"required"`
-	UserId int
+	UserId int64
 }
 
 //替 Event結構 定義一個方法 Save()

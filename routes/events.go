@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"example.com/models"
+	"example.com/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -42,18 +43,22 @@ func createEvent(context *gin.Context) {
 		return
 	}
 
+	userId, err := utils.VerifyToken(token)
+
+	if err != nil {
+		context.JSON(401, gin.H{"message": "Authorization token is required"})
+	}
 	
 
 	event := models.Event{}
-	err := context.ShouldBindJSON(&event)
+	err = context.ShouldBindJSON(&event)
 
 	if err != nil {
 		context.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	event.ID = 1
-	event.UserId = 1
+	event.UserId = userId
 
 	err = event.Save()
 	if err != nil {
